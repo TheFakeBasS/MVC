@@ -1,10 +1,10 @@
 <?php 
 include'header.php';?>
-    <form action="index.php?act=products&op=read" method="POST">
-	    <input type="search" name="search" placeholder="Search.."/>
-      <button type="submit"><i class="fa fa-search"></i></button>
+<form method="POST" action="index.php?act=products&op=search">
+    <input type="text" name="search" placeholder="Search...">
+    <input type="submit" name="submit" value="Search">
 <?php   
 echo $products;
 echo $pagebuttons;
 include'footer.php'; 
-?>
+?>     

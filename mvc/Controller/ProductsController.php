@@ -23,7 +23,7 @@ class ProductsController{
 				$this->collectReadProduct($_REQUEST['id']);
 				break;
 				case 'update':
-				$this->collectUpdateProduct();
+				$this->collectUpdateProduct($_REQUEST['id']);
 				break;
 				case 'delete':
 				$this->collectDeleteProduct($_REQUEST['id']);
@@ -73,27 +73,33 @@ class ProductsController{
 	public function collectReadProduct($id){
         $data = $this->ProductsLogic->readProduct($id);
 		$result = $this->TableLogic->createTable($data,"products",'product_id');
-		include 'view/listProducts.php';
+		include 'view/products.php';
     }
-	public function collectUpdateProduct($id) {
+	public function collectUpdateProduct($product_id) {
+		$msg = "";
+		$type = isset($_REQUEST['product_type_code'])? $_REQUEST['product_type_code'] :null;
+		$supplier = isset($_REQUEST['supplier_id'])? $_REQUEST['supplier_id'] :null;
+		$product_name = isset($_REQUEST['product_name'])? $_REQUEST['product_name'] :null;
+		$price  = isset($_REQUEST['product_price'])? $_REQUEST['product_price'] :null;
+		$details  = isset($_REQUEST['other_product_details'])? $_REQUEST['other_product_details'] :null;
 
-        $type       = isset($_REQUEST['product_type_code']) ?      $_REQUEST['product_type_code']   :NULL;
-        $supplier   = isset($_REQUEST['supplier_id']) ?            $_REQUEST['supplier_id']  :NULL;
-        $name       = isset($_REQUEST['product_name']) ?           $_REQUEST['product_name']  :NULL;
-        $price      = isset($_REQUEST['product_price']) ?          $_REQUEST['product_price']  :NULL;
-        $details    = isset($_REQUEST['other_product_details']) ?  $_REQUEST['other_product_details']  :NULL;
+		if (isset($_REQUEST['submit'])){
+			$products = $this->ProductsLogic-> updateProduct($product_id, $type,  $supplier, $product_name, $price, $details);
 
-        if (isset($_REQUEST['submit'])) {
-            $products = $this->ProductsLogic->updateProduct($id, $type, $supplier, $name, $price, $details);
+			if ($products) {
+				$msg .= "Product has been edited";
+			} else {
+				$msg .= "Product has not been edited";
+			}
+		}
 
-        }
-        $products = $this->ProductsLogic->readProduct($id);
-        $res = $products->fetch(PDO::FETCH_NUM);
-        [$id, $type, $supplier, $name, $price, $details] = $res;
+		$products = $this->ProductsLogic->readProduct($product_id);
+		$res = $products->fetch(PDO::FETCH_NUM);
+		[$product_id, $type, $supplier, $product_name, $price, $details] = $res;
 
-        $operation = "?act=products&op=update&id=$id";
-        include 'view/updateProducts.php';
-    }
+		$operation = "?act=products&op=update&id=$product_id";
+		include 'view/updateProduct.php';
+	}
 	public function collectDeleteProduct($id){
         $product = $this->ProductsLogic->deleteProduct($id);
         include 'view/delete.php';
@@ -101,16 +107,19 @@ class ProductsController{
 	public function __destruct(){
 
 	}
-	public function collectSearchProduct(){
-        if ( isset($_REQUEST['submit']) ) {
-            $search = isset($_REQUEST['search']) ? $_REQUEST['search'] :NULL;
-        } 	else {
-        	$msg = "esnichegluk";
+	public function collectSearchProduct() {
+		if (isset($_POST['submit'])) { // Change '$_REQUEST' to '$_POST' if the form method is POST
+			$search = isset($_POST['search']) ? $_POST['search'] : null; // Use $_POST for the form input
+
+			if ($search != "") {
+				$product = $this->ProductsLogic->searchProduct($search);
+				$result = $this->TableLogic->createTable($product, 'products', 'product_id');
+				include 'view/products.php';
+			} else {
+				$msg = "Search query is empty"; // Set a message when the search query is empty
+			}
 		}
-		echo $msg;
-        $data = $this->ProductsLogic->searchProduct($search);
-        $result = $this->TableLogic->createTable($data,"products",'product_id');
-    }
+	}
     public function collectReadPagedProducts($p){
         $res = $this->ProductsLogic->readAllProducts($p);
         $products = $this->TableLogic->createTable($res[0], "products", "product_id");

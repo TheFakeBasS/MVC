@@ -9,7 +9,7 @@ class ProductsLogic {
 	}
 	
 	public function createProduct(){
-		$sql = "INSERT INTO `products` (`product_id`, `product_type_code`, `supplier_id`, `product_name`, `product_price`, `other_product_details`) VALUES (NULL, '$type_code', '$supplier', '$name', '$price','$details');";
+		$sql = "INSERT INTO `products` (`product_id`, `product_type_code`, `supplier_id`, `product_name`, `product_price`, `other_product_details`) VALUES (NULL, '$product_id', '$type',  '$supplier', '$product_name', '$price', '$details');";
 		echo $sql;
 		$results = $this->DataHandler -> createData($sql);
 		return $results;
@@ -22,23 +22,29 @@ class ProductsLogic {
 	}
 
 	public function readProduct($id){
-		$sql = 'SELECT  * FROM products WHERE id =' . $id;
+		$sql = 'SELECT  * FROM products WHERE product_id =' . $id;
 		$result = $this->DataHandler->readData($sql);
 		return $result;
 	}
 
-	public function updateProduct(){
-
-	}
+    public function updateProduct($product_id, $type,  $supplier, $product_name, $price, $details) {
+        try {
+            $sql = "UPDATE Products SET product_type_code = '" . $type . "', supplier_id = '" . $supplier . "', product_name = '" . $product_name . "', product_price = '" . $price . "', other_product_details = '" . $details . "' WHERE product_id = " . $product_id;
+            $result = $this->DataHandler->updateData($sql);
+            return $result;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 
 	public function deleteProduct($id){
         $sql = 'DELETE FROM products WHERE product_id ='. $id;
         $result = $this->DataHandler->deleteData($sql);
         return $result;
     }
-	public function searchProduct($search){
-        $sql = "SELECT * FROM products WHERE product_id = $search LIKE product_name = $search";
-        $result = $this->DataHandler->readData($sql);
+public function searchProduct($search){
+        $id = "SELECT * FROM products WHERE product_id LIKE '$search%' OR product_name LIKE '$search%';";
+        $result = $this->DataHandler->readData($id);
         return $result;
     }
     public function readAllProducts($p = 1){
