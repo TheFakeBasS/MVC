@@ -25,7 +25,6 @@ class TableLogic {
                 $html .= "<tr>";
                 // $html .= ($addcheckboxes == true) ? $this -> createCheckbox($controller,$row[$uniquecolumn]);
                 // var_dump($row);
-
                 foreach($row as $key => $value) 
                 {
                     $html .= "<th>{$key}</th>";
@@ -36,9 +35,14 @@ class TableLogic {
             }
 
             $html .= "<tr>";
-            foreach ($row as $key => $value){
-                $html .= "<td data-titles='{$key}'>{$value}</td>";
-            }
+                foreach ($row as $key => $value) {
+                if ($key == 'product_price') {
+                    $str_replace = str_replace('.', ',', $value);
+                    $html .= "<td data-title='($key)'>€{$str_replace}</td>";
+
+                }else {
+                    $html .= "<td data-title='($key)'>{$value}</td>";
+                }}
             $id = $row[$id_name];   
             $html .= "<td><a href='index.php?act={$act}&op=update&id={$id}'>update <i class='fa fa-edit'></i></a></td>";
             $html .= "<td><a href='index.php?act={$act}&op=delete&id={$id}'>Delete <i class='fa fa-trash'></a></i></td>";
