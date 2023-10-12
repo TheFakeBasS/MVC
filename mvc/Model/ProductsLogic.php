@@ -37,7 +37,7 @@ class ProductsLogic {
         return $result;
     }
 	public function searchProduct($search){
-        $sql = "SELECT * FROM products WHERE product_id = $search OR product_name = $search";
+        $sql = "SELECT * FROM products WHERE product_id = $search LIKE product_name = $search";
         $result = $this->DataHandler->readData($sql);
         return $result;
     }

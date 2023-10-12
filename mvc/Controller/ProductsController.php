@@ -68,12 +68,12 @@ class ProductsController{
 	public function collectReadProducts(){
 		$data = $this->ProductsLogic->readProducts();
 		$result = $this->TableLogic->createTable($data,"products",'product_id');
-		include 'view/products.php';
+		include 'view/listProducts.php';
     }
 	public function collectReadProduct($id){
         $data = $this->ProductsLogic->readProduct($id);
 		$result = $this->TableLogic->createTable($data,"products",'product_id');
-		include 'view/products.php';
+		include 'view/listProducts.php';
     }
 	public function collectUpdateProduct($id) {
 
@@ -101,14 +101,16 @@ class ProductsController{
 	public function __destruct(){
 
 	}
-	public function collectSearchProduct(){
-        if ( isset($_REQUEST['submit']) ) {
-            $search = isset($_REQUEST['search']) ? $_REQUEST['search'] :NULL;
-        } else 
-        $msg = "esnichegluk";
-        $data = $this->ProductsLogic->searchProduct($search);
-        $result = $this->TableLogic->createTable($data,"products",'product_id');
-    }
+	// public function collectSearchProduct(){
+    //     if ( isset($_REQUEST['submit']) ) {
+    //         $search = isset($_REQUEST['search']) ? $_REQUEST['search'] :NULL;
+    //     } 	else {
+    //     	$msg = "esnichegluk";
+	// 	}
+	// 	echo $msg;
+    //     $data = $this->ProductsLogic->searchProduct($search);
+    //     $result = $this->TableLogic->createTable($data,"products",'product_id');
+    // }
     public function collectReadPagedProducts($p){
         $res = $this->ProductsLogic->readAllProducts($p);
         $products = $this->TableLogic->createTable($res[0], "products", "product_id");
