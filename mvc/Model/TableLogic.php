@@ -22,7 +22,8 @@ class TableLogic {
 
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             if ($tableheader == false) {
-                $html .= "<tr>";
+
+                $html .= "<br> <tr>";
                 // $html .= ($addcheckboxes == true) ? $this -> createCheckbox($controller,$row[$uniquecolumn]);
                 // var_dump($row);
                 foreach($row as $key => $value) 
