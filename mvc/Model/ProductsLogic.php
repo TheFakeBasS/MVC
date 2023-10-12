@@ -32,7 +32,7 @@ class ProductsLogic {
 	}
 
 	public function deleteProduct($id){
-        $sql = 'DELETE FROM products WHERE id ='. $id;
+        $sql = 'DELETE FROM products WHERE product_id ='. $id;
         $result = $this->DataHandler->deleteData($sql);
         return $result;
     }
