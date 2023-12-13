@@ -22,10 +22,10 @@ class TableLogic {
 
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             if ($tableheader == false) {
-                $html .= "<tr>";
+
+                $html .= "<br> <tr>";
                 // $html .= ($addcheckboxes == true) ? $this -> createCheckbox($controller,$row[$uniquecolumn]);
                 // var_dump($row);
-
                 foreach($row as $key => $value) 
                 {
                     $html .= "<th>{$key}</th>";
@@ -36,13 +36,18 @@ class TableLogic {
             }
 
             $html .= "<tr>";
-            foreach ($row as $key => $value){
-                $html .= "<td data-titles='{$key}'>{$value}</td>";
-            }
+                foreach ($row as $key => $value) {
+                if ($key == 'product_price') {
+                    $str_replace = str_replace('.', ',', $value);
+                    $html .= "<td data-title='($key)'>€{$str_replace}</td>";
+
+                }else {
+                    $html .= "<td data-title='($key)'>{$value}</td>";
+                }}
             $id = $row[$id_name];   
-            $html .= "<td><button><a href='index.php?act={$act}&op=update&id={$id}'>update <i class='fa fa-edit'></i></button></a></td>";
-            $html .= "<td><button><a href='index.php?act={$act}&op=delete&id={$id}'>Delete <i class='fa fa-trash'></i></button></a></td>";
-            $html .= "<td><button><a href='index.php?act={$act}&op=read&id={$id}'>Read <i class='fa fa-book'></i></button></a></td>";
+            $html .= "<td><a href='index.php?act={$act}&op=update&id={$id}'>update <i class='fa fa-edit'></i></a></td>";
+            $html .= "<td><a href='index.php?act={$act}&op=delete&id={$id}'>Delete <i class='fa fa-trash'></a></i></td>";
+            $html .= "<td><a href='index.php?act={$act}&op=read&id={$id}'> Read <i class='fa fa-book'></a></i></td>";
             $html .= "</tr>";        
         }
         $html .= "</table></div><br>";
